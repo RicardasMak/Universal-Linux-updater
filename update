@@ -1,0 +1,55 @@
+#!/bin/bash
+
+update_script=/usr/local/bin/update
+
+#log file location for errors (stream 2)
+stream2=/var/log/update_errors.log
+
+#log file location for non errors (stream 1)
+stream1=/var/log/update_success.log
+
+#function will check exit code
+error() {
+    if [ $? -ne 0 ]
+    then
+        echo "Error occurred during the update, check log file at $stream2"
+    else
+        echo "Update complease with no errors"
+    fi
+}
+
+#function will add date to the streams
+date_update(){
+    echo "Updating"
+    echo $(date) >>$stream1 2>>$stream2
+}
+
+#upgrade Arch
+if command -v pacman >/dev/null
+then
+    date_update
+
+    sudo pacman -Syu >>$stream1 2>>$stream2
+    error
+fi
+
+#upgrade Debian based dist
+if command -v apt >/dev/null
+then
+    date_update
+
+    sudo apt update >>$stream1 2>>$stream2
+    error
+
+    sudo apt dist-upgrade -y >>$stream1 2>>$stream2
+    error
+fi 
+
+#upgrade RedHat
+if command -v yum >/dev/null
+then
+    date_update
+
+    sudo yum update -y >>$stream1 2>>$stream2
+    error
+fi
