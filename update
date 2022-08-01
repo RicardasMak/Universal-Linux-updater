@@ -1,7 +1,5 @@
 #!/bin/bash
 
-update_script=/usr/local/bin/update
-
 #log file location for errors (stream 2)
 stream2=/var/log/update_errors.log
 
