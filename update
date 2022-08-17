@@ -37,8 +37,7 @@ then
     date_update
 
     sudo apt update >>$stream1 2>>$stream2
-    error
-
+    
     sudo apt dist-upgrade -y >>$stream1 2>>$stream2
     error
 fi 
